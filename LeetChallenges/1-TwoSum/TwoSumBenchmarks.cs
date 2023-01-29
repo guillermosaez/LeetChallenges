@@ -9,12 +9,13 @@ public class TwoSumBenchmarks
     {
         new(new[] { 2, 7, 11, 15 }, 9),
         new(new[] { 3, 2, 4 }, 6),
-        new(new[] { 3, 3 }, 6)
+        new(new[] { 3, 3 }, 6),
+        new(Enumerable.Range(1, (int)Math.Pow(10, 4)).Select(x => x % 10).ToArray(), 6)
     };
 
     private NumbersAndTarget _currentCase;
 
-    [Params(1, 2, 3)]
+    [Params(1, 2, 3, 4)]
     public int BenchmarkCase;
 
     [GlobalSetup]
