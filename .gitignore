@@ -478,3 +478,7 @@ $RECYCLE.BIN/
 
 # Rider files
 .idea/*
+
+# Ignore any files in /bin and /obj Folders
+**/bin/*
+**/obj/*
