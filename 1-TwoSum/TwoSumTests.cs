@@ -3,55 +3,53 @@ namespace LeetChallenges._1_TwoSum;
 public class TwoSumTests
 {
 	[Theory]
-	[InlineData(null)]
-	public void Numbers_Null(int[] numbers)
+	[InlineData(null, typeof(ArgumentNullException))]
+	[InlineData(new int[] { }, typeof(ArgumentOutOfRangeException))]
+	[InlineData(new[] { 1 }, typeof(ArgumentOutOfRangeException))]
+	[MemberData(nameof(GetNumbersMaxLength))]
+	public void Numbers_Null(int[] numbers, Type exceptionType)
 	{
-		Assert.Throws<ArgumentNullException>(() => TwoSum.Execute(numbers, 0));
+		Action testCode = () => TwoSumValidations.ValidateNumbers(numbers);
+		Exception? exception = Record.Exception(testCode);
+		Assert.IsType(exceptionType, exception);
 	}
 
-	[Theory]
-	[InlineData(new int[] { })]
-	public void Numbers_Empty(int[] numbers)
-	{
-		Assert.Throws<ArgumentOutOfRangeException>(() => TwoSum.Execute(numbers, 0));
-	}
-
-	[Theory]
-	[InlineData(new[] { 1 })]
-	public void Numbers_Length_Less_2(int[] numbers)
-	{
-		Assert.Throws<ArgumentOutOfRangeException>(() => TwoSum.Execute(numbers, 0));
-	}
-
-	[Fact]
-	public void Numbers_Length_More_Max()
+	public static IEnumerable<object[]> GetNumbersMaxLength()
 	{
 		int numbersMaxLength = (int)Math.Pow(10, 4);
-		int[] numbers = Enumerable.Range(1, numbersMaxLength + 1).ToArray();
-		Assert.Throws<ArgumentOutOfRangeException>(() => TwoSum.Execute(numbers, 0));
+		return new[]
+		{
+			new object[] { Enumerable.Range(1, numbersMaxLength + 1).ToArray(), typeof(ArgumentOutOfRangeException) }
+		};
 	}
 
-	[Fact]
-	public void Target_Value_Less_Lower_Limit()
+	[Theory]
+	[MemberData(nameof(GetTargetLimits))]
+	public void Target_Limits(int target, Type exceptionType)
 	{
-		int lowerLimit = -(int)Math.Pow(10, 9);
-		Assert.Throws<ArgumentOutOfRangeException>(() => TwoSum.Execute(new[] { 1, 2 }, lowerLimit - 1));
+		Action testCode = () => TwoSumValidations.ValidateTarget(target);
+		Exception? exception = Record.Exception(testCode);
+		Assert.IsType(exceptionType, exception);
 	}
 
-	[Fact]
-	public void Target_Value_More_Higher_Limit()
+	public static IEnumerable<object[]> GetTargetLimits()
 	{
 		int higherLimit = (int)Math.Pow(10, 9);
-		Assert.Throws<ArgumentOutOfRangeException>(() => TwoSum.Execute(new[] { 1, 2 }, higherLimit + 1));
+		int lowerLimit = higherLimit * -1;
+		return new[]
+		{
+			new object[] { higherLimit + 1, typeof(ArgumentOutOfRangeException) },
+			new object[] { lowerLimit - 1, typeof(ArgumentOutOfRangeException) }
+		};
 	}
 
 	[Theory]
 	[InlineData(new[] { 2, 7, 11, 15 }, 9, new[] { 0, 1 })]
 	[InlineData(new[] { 3, 2, 4 }, 6, new[] { 1, 2 })]
 	[InlineData(new[] { 3, 3 }, 6, new[] { 0, 1 })]
-	public void Correct(int[] numbers, int target, int[] expected)
+	public void V1Correct(int[] numbers, int target, int[] expected)
 	{
-		int[] result = TwoSum.Execute(numbers, target);
+		int[] result = TwoSumV1.Execute(numbers, target);
 		Assert.Equal(expected, result);
 	}
 }
