@@ -8,19 +8,19 @@ public static class AddTwoNumbers
         Validate(list1);
         Validate(list2);
 
-        int list1ReverseSumValue = CalculateReversedSumValue(list1);
-        int list2ReverseSumValue = CalculateReversedSumValue(list2);
-        int sum = list1ReverseSumValue + list2ReverseSumValue;
+        long list1ReverseSumValue = CalculateReversedSumValue(list1);
+        long list2ReverseSumValue = CalculateReversedSumValue(list2);
+        long sum = list1ReverseSumValue + list2ReverseSumValue;
 
-        Stack<int> sumValues = new();
+        Stack<long> sumValues = new();
         do
         {
             sumValues.Push(sum % 10);
             sum /= 10;
         } while (sum > 0);
-        
+
         ListNode resultNode = null;
-        while (sumValues.TryPop(out int value))
+        while (sumValues.TryPop(out long value))
         {
             resultNode = new(value, resultNode);
         }
@@ -51,10 +51,10 @@ public static class AddTwoNumbers
         }
     }
 
-    private static int CalculateReversedSumValue(ListNode list)
+    private static long CalculateReversedSumValue(ListNode list)
     {
-        int result = 0;
-        int multiplier = 1;
+        long result = 0;
+        long multiplier = 1;
         while (list != null)
         {
             result += list.Value * multiplier;
@@ -65,4 +65,4 @@ public static class AddTwoNumbers
     }
 }
 
-public record ListNode(int Value = 0, ListNode? Next = null);
+public record ListNode(long Value = 0, ListNode? Next = null);
